@@ -34,9 +34,10 @@ class Camera {
 		let upperLeftCorner = this.direction.add(xVec.scalarMult(1/2)).add(yVec.scalarMult(1/2));
 		var array = [];
 		for (var x=0; x<this.screen.xRes; x++) {
+			array.push([]);
 			for (var y=0; y<this.screen.yRes; y++) {
 				let endpoint = upperLeftCorner.add(pixelWidth.scalarMult(x)).add(pixelHeight.scalarMult(y)).add(centerOffset);
-				array.push(endpoint);
+				array[x].push(endpoint);
 			}
 		}
 
@@ -55,6 +56,86 @@ class Screen {
 		this.height = height;
 		this.xRes = xRes;
 		this.yRes = yRes;
+	}
+}
+
+class Environment {
+	// Camera camera;
+	// Geometry[] geometries;
+	constructor(camera) {
+		this.camera = camera;
+		this.geometries = [];
+	}
+
+	// CanvasRenderingContext2D context;
+	fireRays(context) {
+		let xRes = this.camera.screen.xRes;
+		let yRes = this.camera.screen.yRes;
+		// TODO Maybe don't worry about the image data until another place?
+		var imageData = context.createImageData(this.camera.screen.xRes, this.camera.screen.yRes);
+
+		let rays = this.camera.getRays();
+		var colorArray = [];
+		for (int x=0; x<xRes; x++) {
+			colorArray.push([]);
+			for (int y=0; y<yRes; y++) {
+				var closestHit = new Contact(false);
+				for (int i=0; i<this.geometries.length; i++) {
+					var newHit = this.geometries[i].evaluateHit(rays[x][y]);
+					if (newHit.isCloserThan(closestHit)) {
+						closestHit = newHit;
+					}
+				}
+				if (closestHit.isHit) {
+					colorArray[x].push(closestHit.color);
+				} else {
+					// colorArray[x].push(blankColor);
+				}
+			}
+		}
+
+	}
+}
+
+// Represents an empty Geometry object.  Subclass it to display an object.
+class Geometry {
+	// Vector ray;
+	// Evaluate a hit using the fiven ray.
+	// Returns: Contact
+	evaluateHit(ray) {
+		return new Contact(false);
+	}
+}
+
+class Contact {
+	// Color color;
+	// number distance;  The distance away from the camera screen the hit occurred, in
+	// boolean isHit;
+	constructor(isHit, distance, color) {
+		this.isHit = isHit;
+		if (this.isHit) {
+			this.distance = distance;
+			this.color = color;
+		}
+	}
+
+	// Contact otherContact;
+	//
+	// Returns: boolean
+	isCloserThan(otherContact) {
+		if (otherContact.isHit && !this.isHit) {
+			return false;
+		} else if (!otherContact.isHit && this.isHit) {
+			return true;
+		} else if (otherContact.isHit && this.isHit) {
+			if (this.distance < otherContact.distance) {
+				return true;
+			} else {
+				return false;
+			}
+		} else { // If both aren't a hit, this has no meaning.  So return false.
+			return false;
+		}
 	}
 }
 
