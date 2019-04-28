@@ -28,9 +28,9 @@ class Camera {
 	getRays() { 
 		let xVec = this.cameraXVec();
 		let yVec = this.cameraYVec();
-		let pixelWidth = xVec.scalarMult(1/this.screen.xRes);
-		let pixelHeight = yVec.scalarMult(1/this.screen.yRes);
-		let centerOffset = pixelWidth.add(pixelHeight).scalarMult(1/2);
+		let pixelWidth = xVec.scalarMult(-1/this.screen.xRes);
+		let pixelHeight = yVec.scalarMult(-1/this.screen.yRes);
+		let centerOffset = pixelWidth.add(pixelHeight).scalarMult(1/2); // An additional offset vector to move the vectors from the top-right corners of the pixels to the middle of the pixels.
 		let upperLeftCorner = this.direction.add(xVec.scalarMult(1/2)).add(yVec.scalarMult(1/2));
 		var array = [];
 		for (var x=0; x<this.screen.xRes; x++) {
@@ -71,6 +71,17 @@ function main() {
 
 	ctx.fillStyle = "red";
 	ctx.fillRect(0, 0, 700, 400);
+
+	var position = new Vector(1, 0, 0);
+	var direction = new Vector(0, 10, 0);
+	var screen = new Screen(100, 50, 10, 5);
+
+	var cam = new Camera(position, direction, screen);
+
+	var vectors = cam.getRays();
+	console.log(vectors);
+
+	
 }
 
 window.onload = main;
