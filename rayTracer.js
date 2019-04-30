@@ -68,19 +68,20 @@ class Environment {
 	}
 
 	// CanvasRenderingContext2D context;
+	// Returns: Color[][]
 	fireRays(context) {
 		let xRes = this.camera.screen.xRes;
 		let yRes = this.camera.screen.yRes;
 		// TODO Maybe don't worry about the image data until another place?
-		var imageData = context.createImageData(this.camera.screen.xRes, this.camera.screen.yRes);
+		//var imageData = context.createImageData(this.camera.screen.xRes, this.camera.screen.yRes);
 
 		let rays = this.camera.getRays();
-		var colorArray = [];
-		for (int x=0; x<xRes; x++) {
+		var colorArray = []; // Color[][] colorArray
+		for (var x=0; x<xRes; x++) {
 			colorArray.push([]);
-			for (int y=0; y<yRes; y++) {
+			for (var y=0; y<yRes; y++) {
 				var closestHit = new Contact(false);
-				for (int i=0; i<this.geometries.length; i++) {
+				for (var i=0; i<this.geometries.length; i++) {
 					var newHit = this.geometries[i].evaluateHit(rays[x][y]);
 					if (newHit.isCloserThan(closestHit)) {
 						closestHit = newHit;
@@ -89,10 +90,12 @@ class Environment {
 				if (closestHit.isHit) {
 					colorArray[x].push(closestHit.color);
 				} else {
-					// colorArray[x].push(blankColor);
+					colorArray[x].push(new Color());
 				}
 			}
 		}
+
+		return colorArray;
 
 	}
 }
@@ -104,6 +107,36 @@ class Geometry {
 	// Returns: Contact
 	evaluateHit(ray) {
 		return new Contact(false);
+	}
+}
+
+// TODO Separate into files.
+// Then implement spheres.
+
+class Color {
+	// number red; // Redness, from 0-255
+	// number green; // Greenness, from 0-255
+	// number blue; // Blueness, from 0-255
+	// number alpha; // Transparency.  0 is fully transparent, and 255 is fully opaque.
+	constructor(red, green, blue, alpha) {
+		if (red == undefined) {
+			// Creates a blank color by default.
+			// Fully transparent black
+			this.red = 0;
+			this.green = 0;
+			this.blue = 0;
+			this.alpha = 0;
+		} else if (alpha == undefined) {
+			this.red = red;
+			this.green = green;
+			this.blue = blue;
+			this.alpha = 255;
+		} else {
+			this.red = red;
+			this.green = green;
+			this.blue = blue;
+			this.alpha = alpha;
+		}
 	}
 }
 
@@ -161,6 +194,9 @@ function main() {
 
 	var vectors = cam.getRays();
 	console.log(vectors);
+
+	var environment = new Environment(cam);
+	console.log(environment.fireRays());
 
 	
 }
