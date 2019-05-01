@@ -21,7 +21,7 @@ class Environment {
 				// Find the closest hit out of all of the geometries and take that as the color for the pixel.
 				var closestHit = new Contact(false);
 				for (var i=0; i<this.geometries.length; i++) {
-					var newHit = this.geometries[i].evaluateHit(rays[x][y]);
+					var newHit = this.geometries[i].evaluateHit(rays[x][y], this.camera.position);
 					if (newHit.isCloserThan(closestHit)) {
 						closestHit = newHit;
 					}

@@ -38,8 +38,8 @@ function main() {
 	ctx.stroke();
 
 	var position = new Vector(1, 0, 0);
-	var direction = new Vector(0, 10, 0);
-	var screen = new Screen(100, 50, 40, 20);
+	var direction = new Vector(0, 1, 0);
+	var screen = new Screen(1, 0.5, 40, 20);
 
 	var cam = new Camera(position, direction, screen);
 
@@ -47,10 +47,12 @@ function main() {
 	console.log(vectors);
 
 	var environment = new Environment(cam);
-	console.log(environment.fireRays());
+
+	var sphere = new Sphere(new Vector(1, 10, 0), 2);
+	environment.geometries.push(sphere);
 
 	var colorArray = environment.fireRays();
-	colorArray[0][0] = new Color(255, 255, 0);
+	colorArray[0][0] = new Color(255, 0, 255);
 	console.log(colorArray);
 
 	var imageData = convertColorArrToImageData(ctx, colorArray);
