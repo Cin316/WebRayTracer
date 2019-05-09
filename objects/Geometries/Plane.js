@@ -1,4 +1,3 @@
-
 class Plane extends Geometry {
 
 	// A ColorFunction takes a Vector position (and a reference to this) and returns the Color of a collision with that position.
@@ -6,6 +5,11 @@ class Plane extends Geometry {
 
 	// Vector normalVector;
 	// Vector pointInPlane;
+
+	// Three points which are in the Plane:
+	// Vector p1;
+	// Vector p2;
+	// Vector p3;
 	// obj can be either a Color or a ColorFunction.
 	constructor(p1, p2, p3, obj) {
 		super();
@@ -43,5 +47,4 @@ class Plane extends Geometry {
 	}
 
 }
-
 
