@@ -43,6 +43,8 @@ function main() {
 	environment.geometries.push(sphere3);
 	var sphere4 = new Sphere(new Vector(40, 100, 20), 10, new Color(255, 0, 255));
 	environment.geometries.push(sphere4);
+	var plane = new Plane(new Vector(0,0,-5), new Vector(0,1,-5), new Vector(1,0,-5), new Color(70, 40, 70));
+	environment.geometries.push(plane);
 
 	var checkeredSphere = new Sphere(new Vector(25, 80, -5), 10, function(point, that) { 
 		let azimuthalAngle = that.pointToAzimuthalAngle(point);
