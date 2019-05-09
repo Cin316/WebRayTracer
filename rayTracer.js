@@ -4,13 +4,17 @@ function main() {
 
 	var ctx = canvas.getContext("2d");
 
+	let cameraScreenResX = 20*16;
+	let cameraScreenResY = 10*16;
+	
+	let scale = 4;
+
 	// BEGIN Blur fix
-	const width = 330;
-	const height = 170;
+	const width = cameraScreenResX + 10;
+	const height = cameraScreenResY + 10;
 	
-	const scale = 4;
-	
-	const pixelRatio = window.devicePixelRatio || 1;
+	//const pixelRatio = window.devicePixelRatio || 1;
+	const pixelRatio = 1;
 
 	canvas.width = width * pixelRatio;
 	canvas.height = height * pixelRatio;
@@ -25,11 +29,11 @@ function main() {
 	// END Blur fix
 
 	ctx.fillStyle = "black";
-	ctx.fillRect(0, 0, 330, 170);
+	ctx.fillRect(0, 0, width, height);
 
 	var position = new Vector(1, 0, 0);
 	var direction = new Vector(0, 1, 0);
-	var screen = new Screen(1, 0.5, 320, 160);
+	var screen = new Screen(1, 0.5, cameraScreenResX, cameraScreenResY);
 
 	var cam = new Camera(position, direction, screen);
 
